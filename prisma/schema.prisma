@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Config {
+  id          Int    @id @default(autoincrement())
+  login       String
+  password    String
+  keys        Json
+  companyName String
+
+  @@map(name: "config")
+}
+
+model Category {
+  categoryId     String   @unique
+  productId      String
+  name           String?
+  data           Json
+  updateAt       DateTime @default(now())
+  changeAttempts Int      @default(5)
+
+  @@map(name: "categories")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  email     String   @id @unique
+  role      Role     @default(USER)
+  imageUrl  String   @default("https://lh3.googleusercontent.com/a/ACg8ocKuVSXUPIdR66Oe1m5r9AowUsvj1qFLfWqc3uQjMz3xwA=s96-c")
+  createdAt DateTime @default(now())
+
+  @@map(name: "users")
+}
